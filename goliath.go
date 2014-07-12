@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/wmgaca/go-phash"
+	// "github.com/wmgaca/go-phash"
 	"github.com/wmgaca/goliath/imagestore"
 	"html/template"
 	_ "image"
@@ -51,13 +51,13 @@ func compareHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("NAME =>", t.Name())
 		}
 
-		pHash, err := phash.ImageHashDCT(t.Name())
-
-		if err != nil {
-			fmt.Println("ERR #3 =>", err)
-		}
-
-		fmt.Println("PHASH =>", pHash)
+		// pHash, err := phash.ImageHashDCT(t.Name())
+		//
+		// if err != nil {
+		// 	fmt.Println("ERR #3 =>", err)
+		// }
+		//
+		// fmt.Println("PHASH =>", pHash)
 
 		fmt.Fprintf(w, "Hello, Go World!")
 	} else {
