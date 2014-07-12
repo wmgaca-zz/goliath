@@ -18,7 +18,7 @@ import (
 var SERVER_ADDR string = ":" + os.Getenv("PORT")
 
 var templates = template.Must(
-	template.ParseGlob(os.Getenv("GOPATH") + "/src/github.com/wmgaca/goliath/templates/*.html"))
+	template.ParseGlob("templates/*")) //os.Getenv("GOPATH") + "/src/github.com/wmgaca/goliath/templates/*.html"))
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	w.WriteHeader(status)
