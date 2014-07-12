@@ -5,3 +5,5 @@ go:
 before_install:
     - sudo apt-get update
     - sudo apt-get install -qq libphash0 libphash0-dev
+install:
+    - go get github.com/wmgaca/go-phash
