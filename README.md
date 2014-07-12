@@ -24,3 +24,9 @@ And enjoy your worthless service:
 ```bash
 curl -i -F -filedata=~/foo/bar.png  http://localhost:8000/compare/
 ```
+
+## Test
+
+```bash
+go test github.com/wmgaca/goliath/tests
+```
