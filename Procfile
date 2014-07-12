@@ -1,1 +1,1 @@
-web: goliath src/github.com/wmgaca/goliath/tests/test_data
+web: goliath $GOPATH/src/github.com/wmgaca/goliath/tests/test_data

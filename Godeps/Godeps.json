@@ -1,0 +1,10 @@
+{
+	"ImportPath": "github.com/wmgaca/goliath",
+	"GoVersion": "go1.2.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/wmgaca/go-phash",
+			"Rev": "4b8fcacfd5df79b115a9df9a5c0ec4dc9f67657e"
+		}
+	]
+}
