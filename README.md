@@ -15,11 +15,12 @@ go get github.com/wmgaca/goliath
 ```
 
 ## Run
+Run the server
 ```bash
 bin/goliath [image-set-dir]
 ```
 
-There you go, now check if it's running:
+And enjoy your worthless service:
 ```bash
 curl -i -F -filedata=~/foo/bar.png  http://localhost:8000/compare/
 ```
