@@ -4,7 +4,7 @@ Image processing POC written in GO:
 * provides an HTTP endpoint to check if given (posted) image exists in the set
 
 ## Prerequisites
-* [go](http://golang.org) would be nice.
+* [Go](http://golang.org) would be nice.
 
 ## Install
 ```bash
