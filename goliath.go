@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-const SERVER_ADDRESS string = ":8000"
+var SERVER_ADDR string = ":8000"
 
 var templates = template.Must(
 	template.ParseGlob("src/github.com/wmgaca/goliath/templates/*.html"))
@@ -70,6 +70,10 @@ func init() {
 		os.Exit(-1)
 	}
 
+	if len(os.Args) > 2 {
+		SERVER_ADDR = os.Args[2]
+	}
+
 	imagestorePath := os.Args[1]
 	fmt.Printf("=> Init image store (path: %s)\n", imagestorePath)
 	startTime := time.Now()
@@ -81,6 +85,6 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/compare/", compareHandler)
 
-	fmt.Println("=> Running server on", SERVER_ADDRESS)
-	http.ListenAndServe(SERVER_ADDRESS, nil)
+	fmt.Println("=> Running server on", SERVER_ADDR)
+	http.ListenAndServe(SERVER_ADDR, nil)
 }

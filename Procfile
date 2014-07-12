@@ -1,1 +1,1 @@
-web: goliath -port=$PORT
+web: goliath src/github.com/wmgaca/goliath/tests/test_data :$PORT
