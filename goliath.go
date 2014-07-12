@@ -9,15 +9,16 @@ import (
 	_ "image/png"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"time"
 )
 
-var SERVER_ADDR string = ":8000"
+var SERVER_ADDR string = ":" + os.Getenv("PORT")
 
 var templates = template.Must(
-	template.ParseGlob("src/github.com/wmgaca/goliath/templates/*.html"))
+	template.ParseGlob(os.Getenv("GOPATH") + "/src/github.com/wmgaca/goliath/templates/*.html"))
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	w.WriteHeader(status)
@@ -70,10 +71,6 @@ func init() {
 		os.Exit(-1)
 	}
 
-	if len(os.Args) > 2 {
-		SERVER_ADDR = os.Args[2]
-	}
-
 	imagestorePath := os.Args[1]
 	fmt.Printf("=> Init image store (path: %s)\n", imagestorePath)
 	startTime := time.Now()
@@ -86,5 +83,9 @@ func main() {
 	http.HandleFunc("/compare/", compareHandler)
 
 	fmt.Println("=> Running server on", SERVER_ADDR)
-	http.ListenAndServe(SERVER_ADDR, nil)
+
+	err := http.ListenAndServe(SERVER_ADDR, nil)
+	if err != nil {
+		log.Fatal("ListenAndServer:", err)
+	}
 }
