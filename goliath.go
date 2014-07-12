@@ -11,9 +11,8 @@ import (
 
 const SERVER_ADDRESS string = ":8000"
 
-var templates = template.Must(template.ParseFiles(
-	"src/github.com/wmgaca/goliath/templates/error_404.html",
-	"src/github.com/wmgaca/goliath/templates/index.html"))
+var templates = template.Must(
+	template.ParseGlob("src/github.com/wmgaca/goliath/templates/*.html"))
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	w.WriteHeader(status)
