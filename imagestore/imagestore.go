@@ -26,7 +26,11 @@ func (i *Image) Path() string {
 // Create a new Image instance
 func NewImage(fullPath string) *Image {
 	fPath, fName := path.Split(fullPath)
-	return &Image{fName, fPath}
+
+	return &Image{
+		name: fName,
+		path: fPath,
+	}
 }
 
 // MD5 hash -> *Image
