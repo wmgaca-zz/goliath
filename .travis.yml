@@ -6,5 +6,4 @@ install:
   - go get -v -u github.com/kr/godep
   - godep get
   - godep go build -v ./...
-script:
-  - PORT=5000 godep go test ./...
+  - export PORT=5000
