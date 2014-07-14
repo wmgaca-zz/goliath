@@ -9,6 +9,7 @@ import (
 	_ "image/png"
 	"io"
 	"io/ioutil"
+	"launchpad.net/goamz/s3"
 	"log"
 	"net/http"
 	"time"
@@ -84,6 +85,24 @@ func ImageHandler(w http.ResponseWriter, r *http.Request) {
 		Time   time.Duration
 	}{
 		Result: imageName,
+		Time:   getElapsedTime(startTime),
+	})
+}
+
+func ListBucketHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r, "ListBucketHandler()")
+	startTime := time.Now()
+
+	res, err := S3GoliathImagesBucket.List("", "", "", 1000)
+	if err != nil {
+		log.Fatal("mybucket.List ERR => ", err)
+	}
+
+	WriteJSONResponse(w, struct {
+		Bucket []s3.Key
+		Time   time.Duration
+	}{
+		Bucket: res.Contents,
 		Time:   getElapsedTime(startTime),
 	})
 }
