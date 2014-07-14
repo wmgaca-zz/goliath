@@ -19,6 +19,7 @@ func init() {
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
+	router.HandleFunc("/compare/", CompareHandler)
 	http.Handle("/", router)
 
 	log.Println("Runnig server on", serverAddr)
