@@ -18,8 +18,9 @@ func init() {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/", HomeHandler)
-	router.HandleFunc("/compare/", CompareHandler)
+	router.HandleFunc("/", HomeHandler).Methods("GET")
+	router.HandleFunc("/compare/", CompareHandler).Methods("POST")
+	router.HandleFunc("/image/{name}/", ImageHandler).Methods("GET")
 	http.Handle("/", router)
 
 	log.Println("Runnig server on", serverAddr)
