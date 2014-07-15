@@ -9,6 +9,16 @@
 		{
 			"ImportPath": "github.com/gorilla/mux",
 			"Rev": "14cafe28513321476c73967a5a4f3454b6129c46"
+		},
+		{
+			"ImportPath": "launchpad.net/goamz/aws",
+			"Comment": "48",
+			"Rev": "ian.booth@canonical.com-20140708164959-72q70lo1du0e4qki"
+		},
+		{
+			"ImportPath": "launchpad.net/goamz/s3",
+			"Comment": "48",
+			"Rev": "ian.booth@canonical.com-20140708164959-72q70lo1du0e4qki"
 		}
 	]
 }
