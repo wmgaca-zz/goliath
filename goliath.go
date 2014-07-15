@@ -19,7 +19,15 @@ var S3GoliathImagesBucket *s3.Bucket
 
 var ServerAddr string
 
+var Debug bool = false
+
 func init() {
+	// Debug mode
+	if len(os.Getenv("DEBUG")) > 0 {
+		log.Println("Debug mode on.")
+		Debug = true
+	}
+
 	// Server port
 	ServerAddr = ":" + os.Getenv("PORT")
 	if len(ServerAddr) == 1 {
@@ -55,5 +63,10 @@ func main() {
 	http.Handle("/", configureRouter())
 
 	log.Println("Runnig server on", ServerAddr)
-	http.ListenAndServe(ServerAddr, nil)
+
+	if Debug {
+		panic(http.ListenAndServe(ServerAddr, nil))
+	} else {
+		http.ListenAndServe(ServerAddr, nil)
+	}
 }
