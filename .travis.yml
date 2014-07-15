@@ -1,7 +1,9 @@
 language: go
 env:
   global:
-    - PORT=5000
+  - PORT=5000
+  - secure: fhlztkevnFCBkXsJnVrZKm/8ramiFmGemisVnMpHoa6Y0UTtWt7g/YuIZhOmoT9MGv/yTMtGUGkCdjapRk+j2mc8j4yqwGdS0GIQ08PMt1WbCI8wAenPS80ky33ziVXjkKfvf+7AztUaqIZKWuuQOGBeI7Sx9gNMUrM1S0+JGo0=
+  - secure: jmJiUqFgKMAc8A/VzkKx8OyQf3S9c9Yg70ZMAMx17ZMYTN5H6ViA05ZmSTrdhFx4eR7IBJS6IVle5aXoFKOJGk141+R6wPOu2NX1zEa3DxijOFT/2YhH7Gw4GesIfzzhgBeh6UNC4+ycuaXeh/TAVwmNPEYPahtY3uAXi7SF0SQ=
 go:
   - 1.3
 install:
