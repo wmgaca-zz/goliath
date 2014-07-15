@@ -9,7 +9,6 @@ import (
 	_ "image/png"
 	"io"
 	"io/ioutil"
-	"launchpad.net/goamz/s3"
 	"log"
 	"net/http"
 	"time"
@@ -98,11 +97,16 @@ func ListBucketHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("mybucket.List ERR => ", err)
 	}
 
+	keys := make([]string, len(res.Contents))
+	for i, key := range res.Contents {
+		keys[i] = key.Key
+	}
+
 	WriteJSONResponse(w, struct {
-		Bucket []s3.Key
-		Time   time.Duration
+		Keys []string
+		Time time.Duration
 	}{
-		Bucket: res.Contents,
-		Time:   getElapsedTime(startTime),
+		Keys: keys,
+		Time: getElapsedTime(startTime),
 	})
 }
