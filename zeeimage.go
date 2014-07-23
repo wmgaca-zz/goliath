@@ -21,7 +21,7 @@ type ZeeImage struct {
 }
 
 func NewZeeImageFromRequest(r *http.Request, fieldName string) (*ZeeImage, error) {
-	imageFile, imageFileHeader, err := r.FormFile("image")
+	imageFile, imageFileHeader, err := r.FormFile(fieldName)
 	if err != nil {
 		return nil, err
 	}
