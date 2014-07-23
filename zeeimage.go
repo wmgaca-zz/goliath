@@ -59,7 +59,6 @@ func (z *ZeeImage) computeMD5Hash() {
 		log.Println("Big Bad Error while computing MD5 hash =>", err)
 		return
 	}
-
 	z.MD5Hash = md5.Sum(bytes)
 }
 

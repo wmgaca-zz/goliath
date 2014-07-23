@@ -1,4 +1,4 @@
-# Go
+# Goliath
 [![Build Status](https://travis-ci.org/wmgaca/goliath.svg?branch=master)](https://travis-ci.org/wmgaca/goliath)
 
 Image processing POC written in Go:
