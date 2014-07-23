@@ -29,29 +29,25 @@ func NewZeeImageFromRequest(r *http.Request, fieldName string) (*ZeeImage, error
 	tempFile, err := ioutil.TempFile(StaticDir, imageFileHeader.Filename+"-")
 	defer tempFile.Close()
 	if err != nil {
-		log.Println("ioutil.TempFile failed with", err)
 		return nil, err
 	}
 
 	_, err = io.Copy(tempFile, imageFile)
 	if err != nil {
-		log.Println("io.Copy failed with", err)
 		return nil, err
 	}
-
-	log.Println("Looks good, dude.")
 
 	return &ZeeImage{Path: tempFile.Name()}, nil
 }
 
 func (z *ZeeImage) String() string {
-	return fmt.Sprintf("%s (phash: %d, md5: %x)", z.Path, z.PHash, z.MD5Hash)
+	return fmt.Sprintf("%s (pHash: %d, MD5: %x)", z.Path, z.PHash, z.MD5Hash)
 }
 
 func (z *ZeeImage) computePHash() {
 	result, err := phash.ImageHashDCT(z.Path)
 	if err != nil {
-		log.Println("Big Bad Error =>", err)
+		log.Println("Big Bad Error while computing pHash =>", err)
 		return
 	}
 	z.PHash = result
@@ -60,7 +56,7 @@ func (z *ZeeImage) computePHash() {
 func (z *ZeeImage) computeMD5Hash() {
 	bytes, err := ioutil.ReadFile(z.Path)
 	if err != nil {
-		log.Println("Big Bad Error =>", err)
+		log.Println("Big Bad Error while computing MD5 hash =>", err)
 		return
 	}
 
@@ -68,16 +64,12 @@ func (z *ZeeImage) computeMD5Hash() {
 }
 
 func (z *ZeeImage) Compute(addToSet bool) {
-	log.Println("Compute =>", z.String())
-
 	z.computePHash()
 	z.computeMD5Hash()
 
 	if addToSet {
 		z.AddToSet()
 	}
-
-	log.Println("Finish =>", z.String())
 }
 
 func (z *ZeeImage) AddToSet() {
