@@ -48,9 +48,8 @@ func configureRouter() *mux.Router {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", HomeHandler).Methods("GET")
-	router.HandleFunc("/compare/", CompareHandler).Methods("POST")
-	router.HandleFunc("/image/{name}/", ImageHandler).Methods("GET")
-	router.HandleFunc("/list/", ListBucketHandler).Methods("GET")
+	router.HandleFunc("/1/upload/", UploadImageHandler).Methods("POST")
+	router.HandleFunc("/1/check/{method:[a-z0-9]+}/", CheckImageHandler).Methods("POST")
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix(
 		"/static/",

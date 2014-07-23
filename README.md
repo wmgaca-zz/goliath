@@ -37,3 +37,35 @@ export AWS_SECRET_ACCESS_KEY="YOUR-AWS-SECRET-ACCESS-KEY-GOES-HERE"
 ```bash
 goliath
 ```
+
+### WAT? :scream:
+
+#### Upload a new image
+```bash
+$ curl -v -include --form "image=@doge.jpg" goliath.go/{apiVersion:[0-9\.]+}/upload/
+{
+    "Status": true,
+    "Path": "/a/relative/path/to/your/doge.jpg"
+    "Time": "1089278"
+}
+```
+
+### Check if a given image already exists
+```bash
+$ curl -v -include --form "image=@doge.jpg" goliath.go/{apiVersion:[0-9\.]+}/check/{methodName:[a-z0-9]+}/
+{
+    "Status": true
+    "Exists": true,
+    "Path":   "/a/relative/path/to/your/doge.jpg"
+    "Time":   "1089278"
+}
+```
+
+### Error response
+```bash
+$ curl goliath.go/no/idea/what/i/am/doing/
+{
+    "Status": false,
+    "Error": "Your have no idea what you're doing."
+}
+```

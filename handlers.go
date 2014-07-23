@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	_ "image"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -18,7 +17,7 @@ func getElapsedTime(startTime time.Time) time.Duration {
 	return time.Now().Sub(startTime)
 }
 
-func WriteJSONResponse(w http.ResponseWriter, v interface{}) {
+func writeJSONResponse(w http.ResponseWriter, v interface{}) {
 	jsonResponse, err := json.Marshal(v)
 	if err != nil {
 		log.Fatal(err)
@@ -27,11 +26,23 @@ func WriteJSONResponse(w http.ResponseWriter, v interface{}) {
 	fmt.Fprintf(w, string(jsonResponse))
 }
 
+func writeErrorResponse(w http.ResponseWriter, err interface{}) {
+	log.Println("ERR:", err)
+
+	writeJSONResponse(w, struct {
+		Status bool
+		Error  interface{}
+	}{
+		Status: false,
+		Error:  err,
+	})
+}
+
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r, "HomeHandler()")
 	startTime := time.Now()
 
-	WriteJSONResponse(w, struct {
+	writeJSONResponse(w, struct {
 		Result string
 		Time   time.Duration
 	}{
@@ -40,73 +51,65 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func CompareHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r, "CompareHandler()")
+func UploadImageHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r, "UploadImageHandler()")
 	startTime := time.Now()
 
-	imageFile, imageFileHeader, err := r.FormFile("image")
+	zeeImage, err := NewZeeImageFromRequest(r, "image")
 	if err != nil {
-		WriteJSONResponse(w, struct{ error error }{err})
+		log.Println("NewZeeImageFromRequest failed.")
+		writeErrorResponse(w, err)
 		return
 	}
 
-	tempFile, err := ioutil.TempFile(StaticDir, imageFileHeader.Filename+"-")
-	defer tempFile.Close()
-	if err != nil {
-		WriteJSONResponse(w, struct{ error error }{err})
-		return
-	}
+	go zeeImage.Compute(true)
 
-	_, err = io.Copy(tempFile, imageFile)
-	if err != nil {
-		WriteJSONResponse(w, struct{ error error }{err})
-		return
-	}
-
-	WriteJSONResponse(w, struct {
-		FilePath string
-		Time     time.Duration
-	}{
-		FilePath: tempFile.Name(),
-		Time:     getElapsedTime(startTime),
-	})
-}
-
-func ImageHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r, "ImageHandler()")
-	startTime := time.Now()
-
-	vars := mux.Vars(r)
-	imageName := vars["name"]
-
-	WriteJSONResponse(w, struct {
-		Result string
+	writeJSONResponse(w, struct {
+		Status bool
+		Path   string
 		Time   time.Duration
 	}{
-		Result: imageName,
+		Status: true,
+		Path:   zeeImage.Path,
 		Time:   getElapsedTime(startTime),
 	})
 }
 
-func ListBucketHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r, "ListBucketHandler()")
+func CheckImageHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r, "CheckImageHandler()")
 	startTime := time.Now()
 
-	res, err := S3GoliathImagesBucket.List("", "", "", 1000)
+	vars := mux.Vars(r)
+	method := vars["method"]
+
+	zeeImage, err := NewZeeImageFromRequest(r, "image")
 	if err != nil {
-		log.Fatal("mybucket.List ERR => ", err)
+		log.Println("NewZeeImageFromRequest failed with", err)
+		writeErrorResponse(w, err)
+		return
+	}
+	zeeImage.Compute(false)
+
+	imageAlreadyExists := false
+	switch method {
+	case "phash":
+		_, imageAlreadyExists = PHashMap[zeeImage.PHash]
+	case "md5":
+		_, imageAlreadyExists = MD5HashMap[zeeImage.MD5Hash]
+	default:
+		writeErrorResponse(w, "Wrong method.")
+		return
 	}
 
-	keys := make([]string, len(res.Contents))
-	for i, key := range res.Contents {
-		keys[i] = key.Key
-	}
-
-	WriteJSONResponse(w, struct {
-		Keys []string
-		Time time.Duration
+	writeJSONResponse(w, struct {
+		Status bool
+		Exists bool
+		Path   string
+		Time   time.Duration
 	}{
-		Keys: keys,
-		Time: getElapsedTime(startTime),
+		Status: true,
+		Exists: imageAlreadyExists,
+		Path:   zeeImage.Path,
+		Time:   getElapsedTime(startTime),
 	})
 }
