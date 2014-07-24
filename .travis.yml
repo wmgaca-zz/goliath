@@ -7,10 +7,12 @@ env:
 go:
   - 1.3
 before_install:
-    - sudo apt-get update
-    - sudo apt-get install libphash0 libphash-dev
+  - sudo apt-get update
+  - sudo apt-get install libphash0 libphash-dev
 install:
   - export PATH=$PATH:$HOME/gopath/bin
-  - go get -v -u github.com/kr/godep
-  - godep get
-  - godep go build -v ./...
+  - go get github.com/gorilla/context
+  - go get github.com/gorilla/mux
+  - go get github.com/wmgaca/go-phash
+  - go get launchpad.net/goamz/aws
+  - go get launchpad.net/goamz/s3
