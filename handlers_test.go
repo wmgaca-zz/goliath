@@ -34,12 +34,12 @@ func TestHomeMethods(t *testing.T) {
 }
 
 // TODO: PUT, POST
-func TestCompareMethods(t *testing.T) {
+func TestCheckMethods(t *testing.T) {
 	tests := []struct {
 		method string
 		status int
 	}{
-		{"POST", http.StatusOK},
+		{method: "POST", status: http.StatusOK},
 	}
 
 	for _, test := range tests {
@@ -50,7 +50,7 @@ func TestCompareMethods(t *testing.T) {
 		}
 
 		w := httptest.NewRecorder()
-		CompareHandler(w, req)
+		CheckImageHandler(w, req)
 
 		if w.Code != test.status {
 			log.Fatal("Response code != ", test.status, "(got", w.Code, "instead)")
