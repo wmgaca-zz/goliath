@@ -1,6 +1,7 @@
 package main
 
 import (
+	"code.google.com/p/go-uuid/uuid"
 	"crypto/md5"
 	"fmt"
 	"github.com/wmgaca/go-phash"
@@ -8,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 var PHashMap = make(map[uint64]*ZeeImage)
@@ -16,6 +18,9 @@ var MD5HashMap = make(map[[16]byte]*ZeeImage)
 
 type ZeeImage struct {
 	Path    string
+	S3Paths map[string]string
+	UUID    string
+	Time    time.Time
 	PHash   uint64
 	MD5Hash [16]byte
 }
@@ -32,12 +37,23 @@ func NewZeeImageFromRequest(r *http.Request, fieldName string) (*ZeeImage, error
 		return nil, err
 	}
 
+	log.Println(tempFile.Name())
+
 	_, err = io.Copy(tempFile, imageFile)
 	if err != nil {
 		return nil, err
 	}
 
-	return &ZeeImage{Path: tempFile.Name()}, nil
+	zeeImage := &ZeeImage{Path: tempFile.Name()}
+	zeeImage.generateS3Paths()
+
+	return zeeImage, nil
+}
+
+func (z *ZeeImage) generateS3Paths() {
+	z.UUID = uuid.New()
+	z.Time = time.Now()
+	z.S3Paths = make(map[string]string)
 }
 
 func (z *ZeeImage) String() string {
