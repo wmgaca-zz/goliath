@@ -1,5 +1,4 @@
 # Goliath
-[![Build Status](https://travis-ci.org/wmgaca/goliath.svg?branch=master)](https://travis-ci.org/wmgaca/goliath)
 
 Image processing POC written in Go:
 * loads a set of images and keeps them in memory,
